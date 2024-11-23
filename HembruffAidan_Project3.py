@@ -9,6 +9,7 @@ Created on Sat Nov 16 15:48:01 2024
 import numpy as np
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
+from pandas import read_csv
 
 # Part 1
 
@@ -64,5 +65,20 @@ plt.title("Radius as a function of Mass for White Dwarf Stars")
 plt.xlabel("Mass (M)")
 plt.ylabel("Radius (R)")
 plt.legend()
+
+plt.close()
+
+# Part 4
+
+# Reading in the data file and assigning each column to a variable
+data =  read_csv("C:/Users/aidan/Desktop/4th_Year/Comp_Sims/wd_mass_radius.csv")
+mass_data =  data["M_Msun"]
+mass_unc = data["M_unc"]
+radius_data = data["R_Rsun"]
+radius_unc = data["R_unc"]
+
+# plotting observational data
+plt.scatter(mass_data,radius_data)
+plt.errorbar(mass_data,radius_data,mass_unc,radius_unc)
 
 plt.show()
