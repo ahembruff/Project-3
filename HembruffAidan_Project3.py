@@ -6,11 +6,11 @@ Created on Sat Nov 16 15:48:01 2024
 """
 # Project 3
 
+# imports
 import numpy as np
 from scipy.integrate import solve_ivp
 import scipy.interpolate as interpolate
 from scipy.optimize import curve_fit
-from scipy.optimize import fsolve
 import matplotlib.pyplot as plt
 from pandas import read_csv
 
@@ -106,11 +106,11 @@ for i in range(len(rho_c)):
         M_diff_list.append(m_diff)
         Rho_diff_list.append(rho_diff)
         
-    dimensional_r.append(soln.t_events[0]*R_0/R_sun)
+    dimensional_r.append(soln.t_events[0][0]*R_0/R_sun)
     dimensional_m.append(soln.y_events[0][0][1]*M_0/M_sun)
 
 m_vals = np.asarray(dimensional_m[7:10])
-r_vals = np.array((dimensional_r[7][0],dimensional_r[8][0],dimensional_r[9][0]))
+r_vals = np.asarray(dimensional_r[7:10])
 
 def linear(x,m,b):
     y = m*x + b
@@ -119,13 +119,15 @@ def linear(x,m,b):
 curve =  curve_fit(linear,m_vals,r_vals)
 Chandrasekhar_estimate = -curve[0][1]/curve[0][0]
 
+
 limit_diff = (np.abs(Chandrasekhar_estimate - (5.836/4))/((Chandrasekhar_estimate+(5.836/4))/2))*100
 print("The percent difference between the estimated Chandrasekhar limit and Kippenhand & Weigert's" +
       "estimation is : %f percent" %limit_diff)
 
+# plotting
 fig1 = plt.figure()
-plt.scatter(dimensional_m,dimensional_r, color = "orange")
-plt.axvline(Chandrasekhar_estimate,color='red',label="Chandrasekhar Limit Estimate", linestyle = "dashed")
+plt.plot(dimensional_m,dimensional_r, color = "red",label = "Solve_IVP ODE Solution",marker ='o')
+plt.axvline(Chandrasekhar_estimate,color='orange',label="Chandrasekhar Limit Estimate", linestyle = "dashed")
 plt.axvline(5.836/4,color='yellow',label="Kippenhahn & Weigert Chandrasekhar Limit", linestyle = "dashed")
 plt.title("Radius as a function of Mass for White Dwarf Stars")
 plt.xlabel("Mass (M_sun)")
@@ -145,8 +147,8 @@ radius_data = data["R_Rsun"]
 radius_unc = data["R_unc"]
 
 # plotting observational data
-plt.scatter(mass_data,radius_data)
+plt.scatter(mass_data,radius_data, label = "Tremblay et al.(2017) Data")
 plt.errorbar(mass_data,radius_data,xerr=mass_unc,yerr=radius_unc,fmt='o')
-
+plt.legend()
 plt.savefig("HembruffAidan_Project3_Fig2")
 plt.show()
