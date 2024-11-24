@@ -214,6 +214,9 @@ plt.plot(dimensional_m,dimensional_r, color = "red",label = "Solve_IVP ODE Solut
 # plotting observational data
 plt.scatter(mass_data,radius_data, label = "Tremblay et al.(2017) Data")
 plt.errorbar(mass_data,radius_data,xerr=mass_unc,yerr=radius_unc,fmt='o')
+plt.title("Radius as a function of Mass for White Dwarf Stars")
+plt.xlabel("Mass (M_sun)")
+plt.ylabel("Radius (R_sun)")
 plt.legend()
 plt.savefig("HembruffAidan_Project3_Fig2.png")
 plt.close()
