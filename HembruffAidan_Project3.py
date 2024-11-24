@@ -119,8 +119,12 @@ def linear(x,m,b):
 curve =  curve_fit(linear,m_vals,r_vals)
 Chandrasekhar_estimate = -curve[0][1]/curve[0][0]
 
+limit_diff = (np.abs(Chandrasekhar_estimate - (5.836/4))/((Chandrasekhar_estimate+(5.836/4))/2))*100
+print("The percent difference between the estimated Chandrasekhar limit and Kippenhand & Weigert's" +
+      "estimation is : %f percent" %limit_diff)
+
 fig1 = plt.figure()
-plt.scatter(dimensional_m,dimensional_r, color = "blue")
+plt.scatter(dimensional_m,dimensional_r, color = "orange")
 plt.axvline(Chandrasekhar_estimate,color='red',label="Chandrasekhar Limit Estimate", linestyle = "dashed")
 plt.axvline(5.836/4,color='yellow',label="Kippenhahn & Weigert Chandrasekhar Limit", linestyle = "dashed")
 plt.title("Radius as a function of Mass for White Dwarf Stars")
@@ -128,8 +132,6 @@ plt.xlabel("Mass (M_sun)")
 plt.ylabel("Radius (R_sun)")
 plt.legend()
 plt.savefig("HembruffAidan_Project3_Fig1.png")
-
-
     
 
 # %%
@@ -144,6 +146,7 @@ radius_unc = data["R_unc"]
 
 # plotting observational data
 plt.scatter(mass_data,radius_data)
-#plt.errorbar(mass_data,radius_data,mass_unc,radius_unc)
+plt.errorbar(mass_data,radius_data,xerr=mass_unc,yerr=radius_unc,fmt='o')
 
+plt.savefig("HembruffAidan_Project3_Fig2")
 plt.show()
