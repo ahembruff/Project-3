@@ -48,7 +48,9 @@ mu_e = 2.
 R_0 = (7.72e8)/mu_e
 M_0 = (5.67e33)/(mu_e**2)
 
-soln_list = []
+R_sun = 6.96e10
+M_sun = 1.99e33
+
 # loop over all values of rho_c
 for i in range(len(rho_c)):
     r_eval = np.linspace(1e-6,10,200)
@@ -56,18 +58,36 @@ for i in range(len(rho_c)):
     # solve_ivp using RK45 method
     soln = solve_ivp(ODE,(1e-6,10),boundary_conds,method="RK45",t_eval = r_eval, events = event) 
     
-    dimensional_r = soln.t_events[0]*R_0
-    dimensional_m = soln.y_events[0][0][1]*M_0
+    if i == 0 or 5 or 9:
+        new_soln = solve_ivp(ODE,(1e-6,10),boundary_conds,method="DOP853",t_eval = r_eval, events = event)
+        
+        r1 = soln.t_events[0]
+        m1 = soln.y_events[0][0][1]
+        rho1 = soln.y_events[0][0][0]
+        
+        r2 = new_soln.t_events[0]
+        m2 = new_soln.y_events[0][0][1]
+        rho2 = new_soln.y_events[0][0][0]
+        
+        r_diff = np.abs(r2-r1)/((r2+r1)/2)
+        m_diff = np.abs(m2-m1)/((m2+m1)/2)
+        rho_diff = np.abs(rho2-rho1)/((rho2+rho1)/2)
+        
+    dimensional_r = soln.t_events[0]*R_0/R_sun
+    dimensional_m = soln.y_events[0][0][1]*M_0/M_sun
 
-    plt.scatter(dimensional_m,dimensional_r, label = rho_c[i])
+    plt.scatter(dimensional_m,dimensional_r, label = rho_c[i], color = "blue")
     
 plt.title("Radius as a function of Mass for White Dwarf Stars")
-plt.xlabel("Mass (M)")
-plt.ylabel("Radius (R)")
+plt.xlabel("Mass (M_sun)")
+plt.ylabel("Radius (R_sun)")
 plt.legend()
+plt.savefig("HembruffAidan_Project3_Fig1.png")
 
-plt.close()
 
+    
+
+# %%
 # Part 4
 
 # Reading in the data file and assigning each column to a variable
