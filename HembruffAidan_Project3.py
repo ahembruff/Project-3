@@ -8,6 +8,9 @@ Created on Sat Nov 16 15:48:01 2024
 
 import numpy as np
 from scipy.integrate import solve_ivp
+import scipy.interpolate as interpolate
+from scipy.optimize import curve_fit
+from scipy.optimize import fsolve
 import matplotlib.pyplot as plt
 from pandas import read_csv
 
@@ -83,9 +86,17 @@ for i in range(len(rho_c)):
         m1 = soln.y_events[0][0][1]
         rho1 = soln.y_events[0][0][0]
         
+        R1_list.append(r1)
+        M1_list.append(m1)
+        Rho1_list.append(rho1)
+        
         r2 = new_soln.t_events[0]
         m2 = new_soln.y_events[0][0][1]
         rho2 = new_soln.y_events[0][0][0]
+        
+        R2_list.append(r2)
+        M2_list.append(m2)
+        Rho2_list.append(rho2)
         
         r_diff = (np.abs(r2-r1)/((r2+r1)/2))*100
         m_diff = (np.abs(m2-m1)/((m2+m1)/2))*100
@@ -98,12 +109,24 @@ for i in range(len(rho_c)):
     dimensional_r.append(soln.t_events[0]*R_0/R_sun)
     dimensional_m.append(soln.y_events[0][0][1]*M_0/M_sun)
 
+m_vals = np.asarray(dimensional_m[7:10])
+r_vals = np.array((dimensional_r[7][0],dimensional_r[8][0],dimensional_r[9][0]))
+
+def linear(x,m,b):
+    y = m*x + b
+    return y
+
+curve =  curve_fit(linear,m_vals,r_vals)
+Chandrasekhar_estimate = -curve[0][1]/curve[0][0]
 
 fig1 = plt.figure()
-plt.scatter(dimensional_m,dimensional_r, label = rho_c[i], color = "blue")
+plt.scatter(dimensional_m,dimensional_r, color = "blue")
+plt.axvline(Chandrasekhar_estimate,color='red',label="Chandrasekhar Limit Estimate", linestyle = "dashed")
+plt.axvline(5.836/4,color='yellow',label="Kippenhahn & Weigert Chandrasekhar Limit", linestyle = "dashed")
 plt.title("Radius as a function of Mass for White Dwarf Stars")
 plt.xlabel("Mass (M_sun)")
 plt.ylabel("Radius (R_sun)")
+plt.legend()
 plt.savefig("HembruffAidan_Project3_Fig1.png")
 
 
