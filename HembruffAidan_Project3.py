@@ -48,8 +48,25 @@ mu_e = 2.
 R_0 = (7.72e8)/mu_e
 M_0 = (5.67e33)/(mu_e**2)
 
+# the mass and radius of the sun in cm and g respectively
 R_sun = 6.96e10
 M_sun = 1.99e33
+
+# empty lists to store percent difference between variables found using different integration methods
+R_diff_list = []
+M_diff_list = []
+Rho_diff_list = []
+
+R1_list = []
+M1_list = []
+Rho1_list = []
+
+R2_list = []
+M2_list = []
+Rho2_list = []
+
+dimensional_r = []
+dimensional_m = []
 
 # loop over all values of rho_c
 for i in range(len(rho_c)):
@@ -58,7 +75,8 @@ for i in range(len(rho_c)):
     # solve_ivp using RK45 method
     soln = solve_ivp(ODE,(1e-6,10),boundary_conds,method="RK45",t_eval = r_eval, events = event) 
     
-    if i == 0 or 5 or 9:
+    if i == 0 or i == 5 or i == 9:
+
         new_soln = solve_ivp(ODE,(1e-6,10),boundary_conds,method="DOP853",t_eval = r_eval, events = event)
         
         r1 = soln.t_events[0]
@@ -69,19 +87,23 @@ for i in range(len(rho_c)):
         m2 = new_soln.y_events[0][0][1]
         rho2 = new_soln.y_events[0][0][0]
         
-        r_diff = np.abs(r2-r1)/((r2+r1)/2)
-        m_diff = np.abs(m2-m1)/((m2+m1)/2)
-        rho_diff = np.abs(rho2-rho1)/((rho2+rho1)/2)
+        r_diff = (np.abs(r2-r1)/((r2+r1)/2))*100
+        m_diff = (np.abs(m2-m1)/((m2+m1)/2))*100
+        rho_diff = (np.abs(rho2-rho1)/((rho2+rho1)/2))*100
         
-    dimensional_r = soln.t_events[0]*R_0/R_sun
-    dimensional_m = soln.y_events[0][0][1]*M_0/M_sun
+        R_diff_list.append(r_diff)
+        M_diff_list.append(m_diff)
+        Rho_diff_list.append(rho_diff)
+        
+    dimensional_r.append(soln.t_events[0]*R_0/R_sun)
+    dimensional_m.append(soln.y_events[0][0][1]*M_0/M_sun)
 
-    plt.scatter(dimensional_m,dimensional_r, label = rho_c[i], color = "blue")
-    
+
+fig1 = plt.figure()
+plt.scatter(dimensional_m,dimensional_r, label = rho_c[i], color = "blue")
 plt.title("Radius as a function of Mass for White Dwarf Stars")
 plt.xlabel("Mass (M_sun)")
 plt.ylabel("Radius (R_sun)")
-plt.legend()
 plt.savefig("HembruffAidan_Project3_Fig1.png")
 
 
@@ -99,6 +121,6 @@ radius_unc = data["R_unc"]
 
 # plotting observational data
 plt.scatter(mass_data,radius_data)
-plt.errorbar(mass_data,radius_data,mass_unc,radius_unc)
+#plt.errorbar(mass_data,radius_data,mass_unc,radius_unc)
 
 plt.show()
