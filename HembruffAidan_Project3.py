@@ -182,8 +182,8 @@ Chandrasekhar_estimate = -curve[0][1]/curve[0][0]
 print("\nThe estimation of the Chandrasekhar limit from the plot is: %f"%Chandrasekhar_estimate)
 # Finding the difference between our estimate of the Chandrasekhar limit and the Weigert-Kippenhan estimate
 limit_diff = (np.abs(Chandrasekhar_estimate - (5.836/4))/((Chandrasekhar_estimate+(5.836/4))/2))*100
-print("\nThe percent difference between the estimated Chandrasekhar limit and Kippenhand & Weigert's" +
-      "estimation is : %f percent" %limit_diff)
+print("\nThe percent difference between the estimated Chandrasekhar limit and Kippenhahn & Weigert's" +
+      " estimation is : %f percent" %limit_diff)
 
 # plotting the ODE solution and Chandrasekhar limit estimations
 fig1 = plt.figure()
