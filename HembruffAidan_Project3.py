@@ -198,9 +198,6 @@ plt.savefig("HembruffAidan_Project3_Fig1.png")
 plt.close()
     
 
-# %%
-# Part 4
-
 # Reading in the data file and assigning each column to a variable
 data =  read_csv("C:/Users/aidan/Desktop/4th_Year/Comp_Sims/wd_mass_radius.csv")
 mass_data =  data["M_Msun"]
