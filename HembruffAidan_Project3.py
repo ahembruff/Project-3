@@ -88,15 +88,12 @@ M_sun = 1.99e33
 # Initialize empty lists to store parameters of interest
 R_diff_list = []
 M_diff_list = []
-Rho_diff_list = []
 
 R1_list = []
 M1_list = []
-Rho1_list = []
 
 R2_list = []
 M2_list = []
-Rho2_list = []
 
 dimensional_r = []
 dimensional_m = []
