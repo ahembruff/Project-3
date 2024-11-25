@@ -58,9 +58,8 @@ def rho_zero_event(r,ystate):
 
     Returns
     -------
-    TYPE
-        DESCRIPTION.
-
+    ystate[0] : The density equal to zero
+    
     """
     if ystate[0] - 1e-5 < 0:
         ystate[0] = 0
